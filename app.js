@@ -1109,6 +1109,9 @@ function setupEventListeners() {
             }
         });
     }
+
+    // Initialize mobile features
+    initMobileFeatures();
 }
 
 function updateCategoryTags() {
@@ -1165,6 +1168,82 @@ function updateDeckCategoryTags() {
             updateDeckCategoryTags();
         });
     });
+}
+
+// Touch Event Handling
+function setupTouchEvents() {
+    const flashcard = document.querySelector('.flashcard');
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    flashcard.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    flashcard.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const swipeDistance = touchEndX - touchStartX;
+
+        if (Math.abs(swipeDistance) < swipeThreshold) {
+            // If swipe distance is small, treat as tap
+            if (state.studySession.cardState === 'question') {
+                document.querySelector('.answer-button').click();
+            } else if (state.studySession.cardState === 'hint') {
+                document.querySelector('.back-to-question').click();
+            } else if (state.studySession.cardState === 'answer') {
+                document.querySelector('.back-to-question').click();
+            }
+            return;
+        }
+
+        // Handle swipe gestures
+        if (swipeDistance > swipeThreshold) {
+            // Swipe right - show hint
+            if (state.studySession.cardState === 'question') {
+                document.querySelector('.hint-button').click();
+            } else if (state.studySession.cardState === 'answer') {
+                document.querySelector('.back-to-question').click();
+            }
+        } else if (swipeDistance < -swipeThreshold) {
+            // Swipe left - show answer
+            if (state.studySession.cardState === 'question') {
+                document.querySelector('.answer-button').click();
+            } else if (state.studySession.cardState === 'hint') {
+                document.querySelector('.back-to-question').click();
+            }
+        }
+    }
+}
+
+// Prevent double-tap zoom on mobile
+function preventDoubleTapZoom() {
+    document.addEventListener('touchend', (e) => {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, { passive: false });
+}
+
+// Handle orientation changes
+function handleOrientationChange() {
+    const isLandscape = window.innerWidth > window.innerHeight;
+    document.body.classList.toggle('landscape', isLandscape);
+}
+
+// Initialize mobile-specific features
+function initMobileFeatures() {
+    setupTouchEvents();
+    preventDoubleTapZoom();
+    handleOrientationChange();
+    window.addEventListener('orientationchange', handleOrientationChange);
+    window.addEventListener('resize', handleOrientationChange);
 }
 
 // Initialize the application

@@ -411,16 +411,191 @@ input:checked + .slider:before {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .deck-grid {
-        grid-template-columns: 1fr;
+    /* Header adjustments */
+    header {
+        padding: 0.75rem 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
     }
 
-    .response-buttons {
+    .header-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    /* Main content adjustments */
+    .view {
+        padding: 1rem;
+    }
+
+    /* Deck grid adjustments */
+    .deck-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .deck-card {
+        margin: 0;
+    }
+
+    /* Controls adjustments */
+    .controls {
         flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-container {
+        max-width: 100%;
+    }
+
+    /* Deck actions adjustments */
+    .deck-actions {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .deck-actions button {
+        flex: 1;
+        min-width: 120px;
+        font-size: 0.9rem;
+    }
+
+    /* Card container adjustments */
+    .card-container {
+        margin: 1rem auto;
     }
 
     .flashcard {
         height: 300px;
+    }
+
+    /* Response buttons adjustments */
+    .response-buttons {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .response-button {
+        width: 100%;
+    }
+
+    /* Modal adjustments */
+    .modal-content {
+        width: 95%;
+        padding: 1rem;
+        margin: 1rem;
+    }
+
+    /* Study controls adjustments */
+    .study-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .score-display {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+
+    .timer-container {
+        margin: 0.5rem 0;
+    }
+}
+
+/* Tablet-specific adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .deck-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .deck-actions {
+        flex-wrap: wrap;
+    }
+
+    .deck-actions button {
+        flex: 1;
+        min-width: 150px;
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+    .deck-card:hover,
+    .response-button:hover,
+    .hint-button:hover,
+    .answer-button:hover,
+    .back-to-question:hover {
+        transform: none;
+    }
+
+    .response-button:active,
+    .hint-button:active,
+    .answer-button:active,
+    .back-to-question:active {
+        opacity: 0.8;
+    }
+
+    /* Increase touch targets */
+    .icon-button,
+    .response-button,
+    .hint-button,
+    .answer-button,
+    .back-to-question {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Adjust spacing for touch */
+    .card-buttons {
+        gap: 1rem;
+    }
+
+    .response-buttons {
+        gap: 1rem;
+    }
+}
+
+/* Landscape mode optimizations */
+@media (max-height: 600px) and (orientation: landscape) {
+    .flashcard {
+        height: 250px;
+    }
+
+    .study-controls {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .score-display {
+        flex-direction: row;
+    }
+}
+
+/* High-DPI screen optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .deck-card,
+    .flashcard,
+    .modal-content {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Dark mode system preference */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-primary: #1a1a1a;
+        --bg-secondary: #2d2d2d;
+        --text-primary: #ffffff;
+        --text-secondary: #b3b3b3;
     }
 }
 
