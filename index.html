@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flashcard Learning App</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="light-theme">
+    <!-- Header -->
+    <header>
+        <h1>Flashcard Learning</h1>
+        <div class="header-controls">
+            <button id="themeToggle" class="icon-button">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="settingsButton" class="icon-button">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Deck List View -->
+        <section id="deckList" class="view active">
+            <div class="controls">
+                <button id="newDeckButton" class="primary-button">
+                    <i class="fas fa-plus"></i> New Deck
+                </button>
+                <div class="search-container">
+                    <input type="text" id="deckSearch" placeholder="Search decks...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            <div id="deckGrid" class="deck-grid">
+                <!-- Decks will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Deck Edit View -->
+        <section id="deckEdit" class="view">
+            <div class="controls">
+                <button id="backToDecks" class="icon-button">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 id="currentDeckName">Deck Name</h2>
+                <div class="deck-actions">
+                    <button id="startSessionButton" class="primary-button">
+                        <i class="fas fa-play"></i> Start Session
+                    </button>
+                    <button id="resetDeckButton" class="secondary-button">
+                        <i class="fas fa-redo"></i> Reset Progress
+                    </button>
+                    <button id="addCardButton" class="primary-button">
+                        <i class="fas fa-plus"></i> Add Card
+                    </button>
+                    <button id="deleteDeckButton" class="danger-button">
+                        <i class="fas fa-trash"></i> Delete Deck
+                    </button>
+                </div>
+            </div>
+            <div id="cardList" class="card-list">
+                <!-- Cards will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Study View -->
+        <section id="studyView" class="view">
+            <div class="study-controls">
+                <button id="exitStudy" class="icon-button" title="Exit Session (Esc)">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="score-display">
+                    <span>Current Score: <span id="currentScore">0</span></span>
+                    <span>High Score: <span id="highScore">0</span></span>
+                </div>
+                <div class="timer-container">
+                    <div class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                    <span id="timer">00:00</span>
+                </div>
+            </div>
+            <div class="card-container">
+                <div class="flashcard">
+                    <div class="card-front">
+                        <div class="question"></div>
+                        <div class="card-buttons">
+                            <button class="hint-button" data-shortcut="H">
+                                <i class="fas fa-lightbulb"></i> Hint
+                            </button>
+                            <button class="answer-button" data-shortcut="A">
+                                <i class="fas fa-eye"></i> Show Answer
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <div class="hint"></div>
+                        <button class="back-to-question" data-shortcut="B">
+                            <i class="fas fa-arrow-left"></i> Back to Question
+                        </button>
+                    </div>
+                    <div class="card-answer">
+                        <div class="answer"></div>
+                        <button class="back-to-question" data-shortcut="B">
+                            <i class="fas fa-arrow-left"></i> Back to Question
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="response-buttons">
+                <button class="response-button" data-score="1" data-shortcut="1">I'm sure</button>
+                <button class="response-button" data-score="0.5" data-shortcut="2">I'm not sure</button>
+                <button class="response-button" data-score="0" data-shortcut="3">I don't know</button>
+            </div>
+            <div class="keyboard-shortcuts">
+                <p>Keyboard Shortcuts: H - Hint, A - Answer, B - Back, 1/2/3 - Response</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <h2>Settings</h2>
+            <div class="close-modal">&times;</div>
+            <div class="settings-section">
+                <h3>Theme</h3>
+                <div class="setting-item">
+                    <label>Dark Mode</label>
+                    <label class="switch">
+                        <input type="checkbox" id="soundSwitch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Background</label>
+                    <select id="mainBackground">
+                        <option value="default">Default</option>
+                        <option value="gradient1">Gradient 1</option>
+                        <option value="gradient2">Gradient 2</option>
+                        <option value="pattern1">Pattern 1</option>
+                        <option value="pattern2">Pattern 2</option>
+                        <option value="custom">Custom Image</option>
+                    </select>
+                    <input type="file" id="customBackground" accept="image/*" style="display: none;">
+                </div>
+            </div>
+            <div class="settings-section">
+                <h3>Sound</h3>
+                <div class="setting-item">
+                    <label>Sound Effects</label>
+                    <label class="switch">
+                        <input type="checkbox" id="soundSwitch">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label>Sound Type</label>
+                    <select id="soundSelect">
+                        <option value="card">Card Flip</option>
+                        <option value="paper">Paper</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-group">
+                <h3>Accessibility</h3>
+                <label class="switch">
+                    <input type="checkbox" id="highContrastSwitch">
+                    <span class="slider"></span>
+                    High Contrast
+                </label>
+                <label class="switch">
+                    <input type="checkbox" id="reducedMotionSwitch">
+                    <span class="slider"></span>
+                    Reduced Motion
+                </label>
+            </div>
+            <button class="close-modal">Close</button>
+        </div>
+    </div>
+
+    <!-- Session Settings Modal -->
+    <div id="sessionSettingsModal" class="modal">
+        <div class="modal-content">
+            <h2>Session Settings</h2>
+            <form id="sessionSettingsForm">
+                <div class="form-group">
+                    <label for="timePerCard">Time per card (seconds):</label>
+                    <input type="range" id="timePerCard" min="5" max="60" value="30" step="5">
+                    <span id="timePerCardValue">30 seconds</span>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="primary-button">Start Session</button>
+                    <button type="button" class="close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Card Modal -->
+    <div id="addCardModal" class="modal">
+        <div class="modal-content">
+            <h2>Add New Card</h2>
+            <form id="addCardForm">
+                <div class="form-group">
+                    <label for="cardQuestion">Question:</label>
+                    <textarea id="cardQuestion" required></textarea>
+                    <input type="file" id="cardQuestionImage" accept="image/*" class="image-upload">
+                </div>
+                <div class="form-group">
+                    <label for="cardHint">Hint:</label>
+                    <textarea id="cardHint" required></textarea>
+                    <input type="file" id="cardHintImage" accept="image/*" class="image-upload">
+                </div>
+                <div class="form-group">
+                    <label for="cardAnswer">Answer:</label>
+                    <textarea id="cardAnswer" required></textarea>
+                    <input type="file" id="cardAnswerImage" accept="image/*" class="image-upload">
+                </div>
+                <div class="form-group">
+                    <label for="cardCategories">Categories:</label>
+                    <div class="categories-input">
+                        <input type="text" id="categoryInput" placeholder="Type category and press Enter">
+                        <div id="selectedCategories" class="selected-categories"></div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="primary-button">Add Card</button>
+                    <button type="button" class="close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- New Deck Modal -->
+    <div id="newDeckModal" class="modal">
+        <div class="modal-content">
+            <h2>Create New Deck</h2>
+            <div class="close-modal">&times;</div>
+            <form id="newDeckForm">
+                <div class="form-group">
+                    <label for="deckName">Deck Name</label>
+                    <input type="text" id="deckName" required>
+                </div>
+                <div class="form-group">
+                    <label for="deckColor">Deck Color</label>
+                    <input type="color" id="deckColor" value="#ff1b1b">
+                </div>
+                <div class="form-group">
+                    <label for="deckBackground">Deck Background</label>
+                    <select id="deckBackground">
+                        <option value="default">Default</option>
+                        <option value="gradient1">Gradient 1</option>
+                        <option value="gradient2">Gradient 2</option>
+                        <option value="pattern1">Pattern 1</option>
+                        <option value="pattern2">Pattern 2</option>
+                        <option value="custom">Custom Image</option>
+                    </select>
+                    <input type="file" id="deckCustomBackground" accept="image/*" style="display: none;">
+                </div>
+                <div class="form-group">
+                    <label for="deckCategoryInput">Categories</label>
+                    <input type="text" id="deckCategoryInput" placeholder="Press Enter to add">
+                    <div id="deckSelectedCategories" class="category-tags"></div>
+                </div>
+                <button type="submit">Create Deck</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Session End Modal -->
+    <div id="sessionEndModal" class="modal">
+        <div class="modal-content">
+            <h2>Session Complete!</h2>
+            <div class="session-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Final Score:</span>
+                    <span id="finalScore" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">High Score:</span>
+                    <span id="sessionHighScore" class="stat-value">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Cards Studied:</span>
+                    <span id="cardsStudied" class="stat-value">0</span>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button id="newSessionButton" class="primary-button">New Session</button>
+                <button id="returnToDeckButton" class="secondary-button">Return to Deck</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html> 
